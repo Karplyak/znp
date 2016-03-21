@@ -18,6 +18,6 @@ I discover weirdnesses of HAL, ZigBee, chineese eval board and commit it here. T
 together by wireless ZB network.
 
 This project has a wiki, but I wrote it in Russian. If you are interested in this project and maybe I can help you(lol),
-email me on fominok@hotmail.com. (Currently there is a working unsecure network on Simple API)
+email me on fominok@hotmail.com. (Currently there is a working secure network on Simple API)
 
 _I use ST HAL in this project, so there is a small chance that you can find something useful here._
