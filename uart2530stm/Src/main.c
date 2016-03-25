@@ -146,9 +146,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
             state = WAIT_SOF;
             if (receive_buffer_1[0] == calcFCS(gff, gff_len)) {
                 // stm32 actions on zb response here
-                printf("%d: ", iter++);
-                awesome_print(gff, gff_len);
-                printf("\n");
+                //printf("%d: ", iter++);
+                //awesome_print(gff, gff_len);
+                //printf("\n");
                 perform_setup();
             }
             HAL_UART_Receive_IT(&huart1, receive_buffer_1, 1);
@@ -175,6 +175,7 @@ typedef enum {
 setup_state s_state = S_RESET_SET;
 
 void perform_setup() {
+  //HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
   do {
     cts = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11);
   } while (cts == GPIO_PIN_SET);
@@ -218,11 +219,14 @@ void perform_setup() {
     //HAL_TIM_Base_Start_IT(&htim2);
     s_state = NOTHING;
     break;
+  case NOTHING:
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
+     HAL_UART_Transmit_IT(&huart2, gff, gff_len);
   default:
     break;
   }
 }
-
+char msg2[] = "Nigger ";
 /* USER CODE END 0 */
 
 int main(void)
