@@ -377,7 +377,7 @@
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT.c</file>
       <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\mt\MT.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_AF.c</file>
-      <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_AF.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\mt\MT_AF.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_APP.c</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_APP.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_DEBUG.c</file>
@@ -392,9 +392,9 @@
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_TASK.c</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_TASK.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_UART.c</file>
-      <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_UART.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\mt\MT_UART.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_UTIL.c</file>
-      <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_UTIL.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\mt\MT_UTIL.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_VERSION.c</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_VERSION.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_ZDO.c</file>
@@ -442,7 +442,7 @@
       <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\stack\zcl\zcl.h</file>
       <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\stack\sec\eccapi.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\stack\zcl\zcl_key_establish.c</file>
-      <file>$PROJ_DIR$\..\..\..\..\Components\stack\zcl\zcl_key_establish.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\stack\zcl\zcl_key_establish.h</file>
       <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\stack\sec\ssp.h</file>
       <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\stack\sec\ssp_hash.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\services\saddr\saddr.c</file>
@@ -542,11 +542,11 @@
       <inputs>
         <tool>
           <name>ICC8051</name>
-          <file> 443 441 442 257 331 248 333 53 364 57 338 360 246 335 339 440 61 362 358 340 245 369 378 427 413 371 429 402 457 459 403 401 399 437 398 405 400 415 419 426 412 462 256 254 382 392 453 447 451 445 394 407 386 388 436 433 396 434 421 423 239 241</file>
+          <file> 443 441 442 257 331 248 333 53 364 57 338 360 246 335 339 440 61 362 358 340 245 369 378 427 413 371 429 402 457 459 403 401 399 437 398 405 400 415 419 426 412 462 256 254 382 392 453 447 451 445 394 407 386 388 436 433 396 434 421 423 239 241 346</file>
         </tool>
         <tool>
           <name>BICOMP</name>
-          <file> 257 331 248 333 53 364 57 338 360 246 335 339 440 61 362 358 340 245 369 378 427 413 371 429 402 457 459 403 401 399 437 398 405 400 415 419 426 412 462 256 254 382 392 453 447 451 445 394 407 386 388 436 433 396 434 421 423 239 241</file>
+          <file> 257 331 248 333 53 364 57 338 360 246 335 339 440 61 362 358 340 245 369 378 427 413 371 429 402 457 459 403 401 399 437 398 405 400 415 419 426 412 462 256 254 382 392 453 447 451 445 394 407 386 388 436 433 396 434 421 423 239 241 346</file>
         </tool>
       </inputs>
     </file>
@@ -2449,7 +2449,7 @@
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT.c</file>
       <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\mt\MT.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_AF.c</file>
-      <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_AF.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\mt\MT_AF.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_APP.c</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_APP.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_DEBUG.c</file>
@@ -2464,9 +2464,9 @@
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_TASK.c</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_TASK.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_UART.c</file>
-      <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_UART.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\mt\MT_UART.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_UTIL.c</file>
-      <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_UTIL.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\mt\MT_UTIL.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_VERSION.c</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_VERSION.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\mt\MT_ZDO.c</file>
@@ -2513,7 +2513,7 @@
       <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\stack\zcl\zcl.h</file>
       <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\stack\sec\eccapi.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\stack\zcl\zcl_key_establish.c</file>
-      <file>$PROJ_DIR$\..\..\..\..\Components\stack\zcl\zcl_key_establish.h</file>
+      <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\stack\zcl\zcl_key_establish.h</file>
       <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\stack\sec\ssp.h</file>
       <file>$PROJ_DIR$\..\..\..\..\COMPONENTS\stack\sec\ssp_hash.h</file>
       <file>$PROJ_DIR$\..\..\..\..\Components\services\saddr\saddr.c</file>

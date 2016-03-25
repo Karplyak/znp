@@ -71,15 +71,20 @@ void awesome_print(byte *buffer, int length) {
     printf("%02X", buffer[i]);
   }
 }
-
+byte SETTINGS_RESET[] ={0xFE, 0x03, 0x26, 0x05, 0x03, 0x01, 0x03, 0x21};
 byte SYS_RESET_REQ[] = {0xFE, 0x00, 0x21, 0x00, 0x21};
+byte TXPOWER[] = {0xFE, 0x02, 0x21, 0x0F, 0x00, 0x0F, 0x23};
 //byte SETUP_1[] = {0xFE, 0x03, 0x26, 0x05, 0x87, 0x01, 0x00, 0xA6}; //Coordinator
 byte SETUP_1[] = {0xFE, 0x03, 0x26, 0x05, 0x87, 0x01, 0x01, 0xA7}; //Router
 byte SETUP_2[] = {0xFE, 0x04, 0x26, 0x05, 0x83, 0x02, 0x13, 0x37, 0x82};
 //byte SETUP_3[] = {0xFE, 0x06, 0x26, 0x05, 0x84, 0x04, 0x00, 0x00, 0x08, 0x00, 0xAD};
-byte SETUP_3[] = {0xFE, 0x15, 0x26, 0x0A, 0x05, 0x05, 0x05, 0x14, 0x88, 0x01, 0x00, 0x02, 0x26, 0x03, 0x26, 0x06, 0x04, 0x46, 0x87, 0x46, 0x83, 0x66, 0x03, 0x66, 0x06, 0xA3};
+byte SETUP_3[] = {0xFE, 0x12, 0x26, 0x05, 0x62, 0x10, 0x13, 0x37, 0x13, 0x37, 0x13, 0x37, 0x13, 0x37, 0x13, 0x37, 0x13, 0x37, 0x13, 0x37, 0x13, 0x37, 0x43};
+//byte SETUP_4[] = {0xFE, 0x03, 0x26, 0x05, 0x63, 0x01, 0x01, 0x43};
+//byte SETUP_5[] = {0xFE, 0x03, 0x26, 0x05, 0x64, 0x01, 0x01, 0x44};
+byte SETUP_4[] = {0xFE, 0x15, 0x26, 0x0A, 0x05, 0x05, 0x05, 0x14, 0x88, 0x01, 0x00, 0x02, 0x26, 0x03, 0x26, 0x06, 0x04, 0x46, 0x87, 0x46, 0x83, 0x66, 0x03, 0x66, 0x06, 0xA3};
 byte SETUP_START[] = {0xFE, 0x00, 0x26, 0x00, 0x26};
-byte GET_PANID[] = {0xFE, 0x01, 0x26, 0x06, 0x06, 0x27};
+//byte GET_PANID[] = {0xFE, 0x01, 0x26, 0x06, 0x06, 0x27};
+
 GPIO_PinState cts;
 GPIO_PinState rts;
 byte receive_buffer_1[256];
@@ -109,7 +114,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
     //if (huart == &huart1) {
     //}
 }
-
+int iter = 0;
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     if (huart == &huart1) {
       HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
@@ -141,9 +146,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
             state = WAIT_SOF;
             if (receive_buffer_1[0] == calcFCS(gff, gff_len)) {
                 // stm32 actions on zb response here
-                //printf("FCS passed! ");
-                //awesome_print(gff, gff_len);
-                //printf("\n");
+                printf("%d: ", iter++);
+                awesome_print(gff, gff_len);
+                printf("\n");
                 perform_setup();
             }
             HAL_UART_Receive_IT(&huart1, receive_buffer_1, 1);
@@ -155,22 +160,37 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     }
 }
 typedef enum {
+  S_RESET_SET,
+  S_RESTART,
+  //S_TXPOWER,
   S_SETUP_1,
   S_SETUP_2,
   S_SETUP_3,
-  //S_SETUP_4,
+  S_SETUP_4,
   S_START,
   S_START_RES_1,
   S_START_RES_2,
   NOTHING
 } setup_state;
-setup_state s_state = S_SETUP_1;
+setup_state s_state = S_RESET_SET;
 
 void perform_setup() {
   do {
     cts = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11);
   } while (cts == GPIO_PIN_SET);
   switch (s_state) {
+  case S_RESET_SET:
+    HAL_UART_Transmit_IT(&huart1, SETTINGS_RESET, sizeof(SETTINGS_RESET));
+    s_state++;
+    break;
+  case S_RESTART:
+    HAL_UART_Transmit_IT(&huart1, SYS_RESET_REQ, sizeof(SYS_RESET_REQ));
+    s_state++;
+    break;
+//  case S_TXPOWER:
+//    HAL_UART_Transmit_IT(&huart1, TXPOWER, sizeof(TXPOWER));
+//    s_state++;
+//    break;
   case S_SETUP_1:
     HAL_UART_Transmit_IT(&huart1, SETUP_1, sizeof(SETUP_1));
     s_state++;
@@ -183,10 +203,10 @@ void perform_setup() {
     HAL_UART_Transmit_IT(&huart1, SETUP_3, sizeof(SETUP_3));
     s_state++;
     break;
-//  case S_SETUP_4:
-//    HAL_UART_Transmit_IT(&huart1, SETUP_4, sizeof(SETUP_4));
-//    s_state++;
-//    break;
+  case S_SETUP_4:
+    HAL_UART_Transmit_IT(&huart1, SETUP_4, sizeof(SETUP_4));
+    s_state++;
+    break;
   case S_START:
     HAL_UART_Transmit_IT(&huart1, SETUP_START, sizeof(SETUP_START));
     s_state++;
@@ -195,7 +215,7 @@ void perform_setup() {
     s_state++;
     break;
   case S_START_RES_2:
-    HAL_TIM_Base_Start_IT(&htim2);
+    //HAL_TIM_Base_Start_IT(&htim2);
     s_state = NOTHING;
     break;
   default:
@@ -288,7 +308,7 @@ void MX_TIM2_Init(void)
   TIM_MasterConfigTypeDef sMasterConfig;
 
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 35999;
+  htim2.Init.Prescaler = 7999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 999;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;

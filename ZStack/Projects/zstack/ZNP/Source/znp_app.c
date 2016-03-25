@@ -169,6 +169,10 @@ void znpInit(uint8 taskId)
     //npSpiInit() is called by hal_spi.c: HalSpiInit().
   }
 
+  // txpowe kek
+#include "mac_low_level.h"
+  macRadioSetTxPower(0x05);
+  //
   znpTaskId = taskId;
   MT_Init(taskId);
   npInitNV();
