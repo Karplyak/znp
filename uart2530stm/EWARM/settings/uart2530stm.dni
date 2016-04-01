@@ -1,5 +1,5 @@
 [DebugChecksum]
-Checksum=103469667
+Checksum=-2035662419
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -47,6 +47,18 @@ GraphEnabled=0
 ShowTimeLog=1
 ShowTimeSum=1
 SumSortOrder=0
+[Trace2]
+Enabled=0
+ShowSource=0
+[SWOTraceWindow]
+PcSampling=0
+InterruptLogs=0
+ForcedTimeStamps=0
+EventCPI=0
+EventEXC=0
+EventFOLD=0
+EventLSU=0
+EventSLEEP=0
 [Disassemble mode]
 mode=0
 [Breakpoints2]
@@ -61,23 +73,11 @@ LogFile=_ ""
 [Aliases]
 Count=0
 SuppressDialog=0
-[Trace2]
-Enabled=0
-ShowSource=0
-[SWOTraceWindow]
-PcSampling=0
-InterruptLogs=0
-ForcedTimeStamps=0
-EventCPI=0
-EventEXC=0
-EventFOLD=0
-EventLSU=0
-EventSLEEP=0
 [CallStackLog]
 Enabled=0
 [DriverProfiling]
 Enabled=0
-Mode=3
+Mode=0
 Graph=0
 Symbiont=0
 Exclusions=

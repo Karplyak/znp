@@ -73,7 +73,7 @@ void awesome_print(byte *buffer, int length) {
 }
 byte SETTINGS_RESET[] ={0xFE, 0x03, 0x26, 0x05, 0x03, 0x01, 0x03, 0x21};
 byte SYS_RESET_REQ[] = {0xFE, 0x00, 0x21, 0x00, 0x21};
-byte TXPOWER[] = {0xFE, 0x02, 0x21, 0x0F, 0x00, 0x0F, 0x23};
+//byte TXPOWER[] = {0xFE, 0x02, 0x21, 0x0F, 0x00, 0x0F, 0x23};
 //byte SETUP_1[] = {0xFE, 0x03, 0x26, 0x05, 0x87, 0x01, 0x00, 0xA6}; //Coordinator
 byte SETUP_1[] = {0xFE, 0x03, 0x26, 0x05, 0x87, 0x01, 0x01, 0xA7}; //Router
 byte SETUP_2[] = {0xFE, 0x04, 0x26, 0x05, 0x83, 0x02, 0x13, 0x37, 0x82};
@@ -111,8 +111,9 @@ byte calcFCS(byte *pMsg, unsigned int len) {
 }
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
-    //if (huart == &huart1) {
-    //}
+    if (huart == &huart2) {
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
+    }
 }
 int iter = 0;
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
@@ -146,9 +147,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
             state = WAIT_SOF;
             if (receive_buffer_1[0] == calcFCS(gff, gff_len)) {
                 // stm32 actions on zb response here
-                //printf("%d: ", iter++);
-                //awesome_print(gff, gff_len);
-                //printf("\n");
+                printf("%d: ", iter++);
+                awesome_print(gff, gff_len);
+                printf("\n");
                 perform_setup();
             }
             HAL_UART_Receive_IT(&huart1, receive_buffer_1, 1);
@@ -158,11 +159,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
             break;
         }
     }
+    if (huart == &huart2) {
+        
+    }
 }
 typedef enum {
   S_RESET_SET,
   S_RESTART,
-  //S_TXPOWER,
   S_SETUP_1,
   S_SETUP_2,
   S_SETUP_3,
@@ -175,7 +178,6 @@ typedef enum {
 setup_state s_state = S_RESET_SET;
 
 void perform_setup() {
-  //HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
   do {
     cts = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11);
   } while (cts == GPIO_PIN_SET);
@@ -188,10 +190,6 @@ void perform_setup() {
     HAL_UART_Transmit_IT(&huart1, SYS_RESET_REQ, sizeof(SYS_RESET_REQ));
     s_state++;
     break;
-//  case S_TXPOWER:
-//    HAL_UART_Transmit_IT(&huart1, TXPOWER, sizeof(TXPOWER));
-//    s_state++;
-//    break;
   case S_SETUP_1:
     HAL_UART_Transmit_IT(&huart1, SETUP_1, sizeof(SETUP_1));
     s_state++;
@@ -216,19 +214,19 @@ void perform_setup() {
     s_state++;
     break;
   case S_START_RES_2:
-    //HAL_TIM_Base_Start_IT(&htim2);
+    HAL_TIM_Base_Start_IT(&htim2);
     s_state = NOTHING;
     break;
   case NOTHING:
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
-     HAL_UART_Transmit_IT(&huart2, gff, gff_len);
+    //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
+    //HAL_UART_Transmit_IT(&huart2, gff, gff_len);
   default:
     break;
   }
 }
-char msg2[] = "Nigger ";
-/* USER CODE END 0 */
 
+/* USER CODE END 0 */
+char msg2[] = "fokk ";
 int main(void)
 {
 
@@ -314,7 +312,7 @@ void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 7999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 999;
+  htim2.Init.Period = 29999;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   HAL_TIM_Base_Init(&htim2);
 
