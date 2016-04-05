@@ -44,13 +44,15 @@
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-
+typedef char byte;
+extern byte receive_buffer_1[256];
+#define GFF_CONST 3
+   
 void NMI_Handler(void);
 void SysTick_Handler(void);
 void TIM2_IRQHandler(void);
 void USART1_IRQHandler(void);
 void USART2_IRQHandler(void);
-void EXTI15_10_IRQHandler(void);
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,5 @@
 [DebugChecksum]
-Checksum=-2035662419
+Checksum=-1775680032
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -62,7 +62,9 @@ EventSLEEP=0
 [Disassemble mode]
 mode=0
 [Breakpoints2]
-Count=0
+Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Src\stm32f1xx_it.c}.188.3" 0 0 1 "" 0 "" 0
+Bp1=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Src\stm32f1xx_it.c}.189.5" 0 0 1 "" 0 "" 0
+Count=2
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
