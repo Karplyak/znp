@@ -41,6 +41,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
@@ -54,6 +55,7 @@ UART_HandleTypeDef huart2;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_TIM3_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 
@@ -71,8 +73,10 @@ void awesome_print(byte *buffer, int length) {
     printf("%02X", buffer[i]);
   }
 }
-byte SETTINGS_RESET[] ={0xFE, 0x03, 0x26, 0x05, 0x03, 0x01, 0x03, 0x21};
-byte SYS_RESET_REQ[] = {0xFE, 0x00, 0x21, 0x00, 0x21};
+//byte SETTINGS_RESET[] ={0xFE, 0x03, 0x26, 0x05, 0x03, 0x01, 0x03, 0x21};
+byte SETTINGS_RESET[] ={0xFE, 0x03, 0x26, 0x05, 0x03, 0x01, 0x00, 0x22};
+//byte SYS_RESET_REQ[] = {0xFE, 0x00, 0x21, 0x00, 0x21};
+byte SYS_RESET_REQ[] = {0xFE, 0x01, 0x41, 0x00, 0x00, 0x40};
 //byte TXPOWER[] = {0xFE, 0x02, 0x21, 0x0F, 0x00, 0x0F, 0x23};
 //byte SETUP_1[] = {0xFE, 0x03, 0x26, 0x05, 0x87, 0x01, 0x00, 0xA6}; //Coordinator
 byte SETUP_1[] = {0xFE, 0x03, 0x26, 0x05, 0x87, 0x01, 0x01, 0xA7}; //Router
@@ -164,7 +168,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     }
 }
 typedef enum {
-  S_RESET_SET,
+  //S_RESET_SET,
   S_RESTART,
   S_SETUP_1,
   S_SETUP_2,
@@ -175,17 +179,18 @@ typedef enum {
   S_START_RES_2,
   NOTHING
 } setup_state;
-setup_state s_state = S_RESET_SET;
+//setup_state s_state = S_RESET_SET;
+setup_state s_state = S_RESTART;
 
 void perform_setup() {
   do {
     cts = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11);
   } while (cts == GPIO_PIN_SET);
   switch (s_state) {
-  case S_RESET_SET:
-    HAL_UART_Transmit_IT(&huart1, SETTINGS_RESET, sizeof(SETTINGS_RESET));
-    s_state++;
-    break;
+//  case S_RESET_SET:
+//    HAL_UART_Transmit_IT(&huart1, SETTINGS_RESET, sizeof(SETTINGS_RESET));
+//    s_state++;
+//    break;
   case S_RESTART:
     HAL_UART_Transmit_IT(&huart1, SYS_RESET_REQ, sizeof(SYS_RESET_REQ));
     s_state++;
@@ -226,7 +231,7 @@ void perform_setup() {
 }
 
 /* USER CODE END 0 */
-char msg2[] = "fokk ";
+
 int main(void)
 {
 
@@ -245,6 +250,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM2_Init();
+  MX_TIM3_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
 
@@ -312,7 +318,7 @@ void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 7999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 29999;
+  htim2.Init.Period = 4999;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   HAL_TIM_Base_Init(&htim2);
 
@@ -322,6 +328,29 @@ void MX_TIM2_Init(void)
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);
+
+}
+
+/* TIM3 init function */
+void MX_TIM3_Init(void)
+{
+
+  TIM_ClockConfigTypeDef sClockSourceConfig;
+  TIM_MasterConfigTypeDef sMasterConfig;
+
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 7999;
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 19;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  HAL_TIM_Base_Init(&htim3);
+
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig);
+
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig);
 
 }
 
@@ -381,8 +410,8 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PB12 PB13 PB14 PB15 */
-  GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
+  /*Configure GPIO pin : PB13 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);

@@ -1,6 +1,6 @@
 [PreviousGenFiles]
-HeaderPath=C:/Users/stjfk/Documents/stm_projects/uart2530stm/Inc
-SourcePath=C:/Users/stjfk/Documents/stm_projects/uart2530stm/Src
+HeaderPath=C:/Users/stjfk/Documents/stm_projects/znpshit/uart2530stm/Inc
+SourcePath=C:/Users/stjfk/Documents/stm_projects/znpshit/uart2530stm/Src
 SourceFiles=stm32f1xx_it.h;stm32f1xx_hal_conf.h;mxconstants.h;stm32f1xx_it.c;stm32f1xx_hal_msp.c;main.c;
 HeaderFiles=stm32f1xx_it.h;stm32f1xx_hal_conf.h;mxconstants.h;
 

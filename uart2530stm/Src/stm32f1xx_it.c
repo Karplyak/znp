@@ -40,10 +40,15 @@ char msg[] = {0xFE, 0x0A, 0x26, 0x03, 0xFF, 0xFF, 0x00, 0x00, 0x88, 0x00, 0x0A, 
 long impulse_counter = 0;
 char buffer_it[256];
 size_t howlong;
+
+char state_tim3 = 0;
+char state_tim2 = 0;
+char state_ioint = 0;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 
@@ -93,15 +98,46 @@ void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
   //char msg[] = {0xFE, 0x01, 0x26, 0x06, 0x06, 0x27};
-
+  switch (state_tim2) {
+    case 0: 
+      state_tim2 = 1;
+      break;
+    case 1: 
+      printf("Impulse: %d\n", impulse_counter);
+      break;
+  }
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
   /* USER CODE END TIM2_IRQn 1 */
-  sprintf(buffer_it, "Impulses: %d", impulse_counter);
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
-  HAL_UART_Transmit_IT(&huart2, buffer_it, strlen(buffer_it));
-  impulse_counter = 0;
+}
+
+/**
+* @brief This function handles TIM3 global interrupt.
+*/
+void TIM3_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM3_IRQn 0 */
+  switch (state_tim3) {
+    case 0: 
+      state_tim3 = 1;
+      break;
+    case 1: 
+      //printf("test\n");
+      if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_13) == GPIO_PIN_SET) {
+          state_ioint = 2;
+          HAL_TIM_Base_Stop(&htim3);
+      } else {
+          state_ioint = 0;
+          HAL_TIM_Base_Stop(&htim3);
+      }
+      break;
+  }
+  /* USER CODE END TIM3_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim3);
+  /* USER CODE BEGIN TIM3_IRQn 1 */
+
+  /* USER CODE END TIM3_IRQn 1 */
 }
 
 /**
@@ -135,19 +171,28 @@ void USART2_IRQHandler(void)
 /**
 * @brief This function handles EXTI line[15:10] interrupts.
 */
-char msg1[] = "Tap! ";
 void EXTI15_10_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI15_10_IRQn 0 */
-
+  switch (state_ioint) {
+    case 0: 
+      HAL_TIM_Base_Start_IT(&htim3);
+      state_ioint = 1;
+      break;
+    case 1:
+      break;
+    case 2:
+      if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_13) == GPIO_PIN_RESET) {
+          impulse_counter++;
+          state_ioint = 0;
+      }
+      break;
+  }
   /* USER CODE END EXTI15_10_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_12);
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
-  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_14);
-  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_15);
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */
 
-  impulse_counter++;
+  //HAL_TIM_Base_Start(&htim3);
   /* USER CODE END EXTI15_10_IRQn 1 */
 }
 
