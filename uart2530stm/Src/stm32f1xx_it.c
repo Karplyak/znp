@@ -104,6 +104,7 @@ void TIM2_IRQHandler(void)
       break;
     case 1: 
       printf("Impulse: %d\n", impulse_counter);
+      impulse_counter = 0;
       break;
   }
   /* USER CODE END TIM2_IRQn 0 */
