@@ -183,11 +183,10 @@ void EXTI15_10_IRQHandler(void)
     case 1:
       break;
     case 2:
-      if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_13) == GPIO_PIN_RESET) {
           impulse_counter++;
           state_ioint = 0;
-      }
-      break;
+          break;
+      
   }
   /* USER CODE END EXTI15_10_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
