@@ -212,6 +212,7 @@ void perform_setup() {
     s_state++;
     break;
   case S_START:
+    
     HAL_UART_Transmit_IT(&huart1, SETUP_START, sizeof(SETUP_START));
     s_state++;
     break;
@@ -219,7 +220,7 @@ void perform_setup() {
     s_state++;
     break;
   case S_START_RES_2:
-    HAL_TIM_Base_Start_IT(&htim2);
+    //HAL_TIM_Base_Start_IT(&htim2);
     s_state = NOTHING;
     break;
   case NOTHING:
@@ -255,6 +256,10 @@ int main(void)
   MX_USART2_UART_Init();
 
   /* USER CODE BEGIN 2 */
+  
+  HAL_TIM_Base_Start_IT(&htim2);
+  HAL_TIM_Base_Start_IT(&htim3);
+  
   //HAL_UART_Receive_IT(&huart1, receive_buffer_1, 1);
   //memcpy(send_buffer_1, SYS_RESET_REQ, sizeof(SYS_RESET_REQ));
   //HAL_UART_Transmit_IT(&huart1, send_buffer_1, sizeof(SYS_RESET_REQ));
@@ -265,7 +270,6 @@ int main(void)
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);
   HAL_Delay(1000);
   HAL_UART_Transmit_IT(&huart1, SYS_RESET_REQ, sizeof(SYS_RESET_REQ));
-    
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -341,7 +345,7 @@ void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 7999;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 19;
+  htim3.Init.Period = 1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   HAL_TIM_Base_Init(&htim3);
 
@@ -410,8 +414,8 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PB13 */
-  GPIO_InitStruct.Pin = GPIO_PIN_13;
+  /*Configure GPIO pins : PB12 PB13 PB14 PB15 */
+  GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);

@@ -1,0 +1,31 @@
+object sjiet {
+	def fcs(a: Vector[Byte]): Byte = {
+		(a.foldLeft(0)((acc, x)=> acc ^ x)).toByte
+	}                                         //> fcs: (a: Vector[Byte])Byte
+	fcs(Vector(0x00,0x21,0x00)) toHexString   //> res0: String = 21
+
+	implicit def intToByteArray(b: Int): Vector[Byte] = Vector(b.toByte)
+                                                  //> intToByteArray: (b: Int)Vector[Byte]
+	implicit def intToByte(i: Int): Byte = i.toByte
+                                                  //> intToByte: (i: Int)Byte
+
+	def buildCmd(cmd0: Byte, cmd1: Byte, data: Vector[Byte]): Vector[Byte] = {
+		val len: Byte = data.length.toByte
+		val sof: Byte = 0xFE.toByte
+		val gff: Vector[Byte] = len +: cmd0 +: cmd1 +: data
+		sof +: gff :+ fcs(gff)
+	}                                         //> buildCmd: (cmd0: Byte, cmd1: Byte, data: Vector[Byte])Vector[Byte]
+
+	val cmd = buildCmd(0x26, 0x05, Vector(0x83, 0x02, 0x13, 0x37))
+                                                  //> cmd  : Vector[Byte] = Vector(-2, 4, 38, 5, -125, 2, 19, 55, -126)
+	//val cmd = buildCmd(0x21, 0x00, Vector())
+	for (x <-cmd) println(x toHexString)      //> fffffffe
+                                                  //| 4
+                                                  //| 26
+                                                  //| 5
+                                                  //| ffffff83
+                                                  //| 2
+                                                  //| 13
+                                                  //| 37
+                                                  //| ffffff82
+}

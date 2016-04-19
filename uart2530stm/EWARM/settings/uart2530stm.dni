@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=2060448040
+Checksum=24589754
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -17,6 +17,8 @@ StopOnThrow=_ 0
 ShowArgs=0
 [Disassembly]
 MixedMode=1
+[array_types]
+Fmt0=char[4]	3	0
 [watch_formats]
 Fmt0={W}42:state_ioint	3	0
 Fmt1={W}42:state_tim2	3	0
