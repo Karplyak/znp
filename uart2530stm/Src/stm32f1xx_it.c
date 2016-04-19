@@ -1,4 +1,4 @@
- /**
+/**
   ******************************************************************************
   * @file    stm32f1xx_it.c
   * @brief   Interrupt Service Routines.
@@ -34,7 +34,6 @@
 #include "stm32f1xx_hal.h"
 #include "stm32f1xx.h"
 #include "stm32f1xx_it.h"
-#include "constants.h"
 
 /* USER CODE BEGIN 0 */
 #define INPUTS 4
@@ -55,16 +54,19 @@ char counter_tim3[] = {0, 0, 0, 0};
 char state_ioint[] = {0, 0, 0, 0};
 GPIO_PinState pins[INPUTS];
 
+
+
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern RTC_HandleTypeDef hrtc;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 
 /******************************************************************************/
-/*            Cortex-M3 Processor Interruption and Exception Handlers         */
+/*            Cortex-M3 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
 
 /**
@@ -152,23 +154,6 @@ void TIM3_IRQHandler(void)
           }
       }
   }
-    // switch (state_tim3) {
-    //     case 0:
-    //     state_tim3 = 1;
-    //     break;
-    //     case 1:
-    //     //printf("test\n");
-    //     if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_13) == GPIO_PIN_SET) {
-    //         state_ioint = 2;
-    //         HAL_TIM_Base_Stop(&htim3);
-    //     } else {
-    //         state_ioint = 0;
-    //         HAL_TIM_Base_Stop(&htim3);
-    //     }
-    //     break;
-    // }
-
-
   /* USER CODE END TIM3_IRQn 0 */
   HAL_TIM_IRQHandler(&htim3);
   /* USER CODE BEGIN TIM3_IRQn 1 */
@@ -240,6 +225,31 @@ void EXTI15_10_IRQHandler(void)
 
     //HAL_TIM_Base_Start(&htim3);
   /* USER CODE END EXTI15_10_IRQn 1 */
+}
+
+/**
+* @brief This function handles RTC alarm interrupt through EXTI line 17.
+*/
+void RTC_Alarm_IRQHandler(void)
+{
+  /* USER CODE BEGIN RTC_Alarm_IRQn 0 */
+  RTC_TimeTypeDef sTime;
+  RTC_DateTypeDef sDate;
+  RTC_AlarmTypeDef sAlarm;
+  
+  HAL_RTC_GetTime(&hrtc, &sTime, FORMAT_BIN);
+  HAL_RTC_GetDate(&hrtc, &sDate, FORMAT_BIN);
+  
+  sAlarm.AlarmTime.Hours = sTime.Hours;
+  sAlarm.AlarmTime.Minutes = sTime.Minutes;
+  sAlarm.AlarmTime.Seconds = sTime.Seconds + 15;
+  
+  HAL_RTC_SetAlarm_IT(&hrtc, &sAlarm, FORMAT_BIN);
+  /* USER CODE END RTC_Alarm_IRQn 0 */
+  HAL_RTC_AlarmIRQHandler(&hrtc);
+  /* USER CODE BEGIN RTC_Alarm_IRQn 1 */
+
+  /* USER CODE END RTC_Alarm_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
